@@ -1,0 +1,12 @@
+// raddbg 0.9.19 project file
+
+recent_file: path: "src/main.cpp"
+recent_file: path: "src/resource_manager.h"
+recent_file: path: "src/asset_manager/asset_manager.cpp"
+recent_file: path: "src/asset_manager/asset_manager.h"
+target:
+{
+  executable: "zig-out/bin/ChrisEngine.exe"
+  working_directory: "zig-out/bin/"
+  enabled: 1
+}

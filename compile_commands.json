@@ -1,0 +1,32 @@
+[
+	{
+		"arguments": [
+			"clang",
+			"C:\\Users\\nefes\\Personal\\ChrisEngine\\src\\main.cpp",
+			"-o",
+			"C:\\Users\\nefes\\AppData\\Local\\zig\\main.cpp.o",
+			"-std=c++20",
+			"-Wno-reorder",
+			"-lraylib",
+			"-IC:\\Users\\nefes\\Personal\\ChrisEngine\\third_party\\raylib\\include"
+		],
+		"directory": "C:\\Users\\nefes\\Personal\\ChrisEngine",
+		"file": "C:\\Users\\nefes\\Personal\\ChrisEngine\\src\\main.cpp",
+		"output": "C:\\Users\\nefes\\AppData\\Local\\zig\\main.cpp.o"
+	},
+	{
+		"arguments": [
+			"clang",
+			"C:\\Users\\nefes\\Personal\\ChrisEngine\\src\\asset_manager\\asset_manager.cpp",
+			"-o",
+			"C:\\Users\\nefes\\AppData\\Local\\zig\\asset_manager.cpp.o",
+			"-std=c++20",
+			"-Wno-reorder",
+			"-lraylib",
+			"-IC:\\Users\\nefes\\Personal\\ChrisEngine\\third_party\\raylib\\include"
+		],
+		"directory": "C:\\Users\\nefes\\Personal\\ChrisEngine",
+		"file": "C:\\Users\\nefes\\Personal\\ChrisEngine\\src\\asset_manager\\asset_manager.cpp",
+		"output": "C:\\Users\\nefes\\AppData\\Local\\zig\\asset_manager.cpp.o"
+	}
+]
