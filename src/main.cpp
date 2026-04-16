@@ -7,6 +7,7 @@
 AssetManager g_assetManager;
 Texture2D g_tex;
 
+// This is a change for visualizing git
 void Intialize() {
     // Initialization
     const int32_t screenWidth = 800;

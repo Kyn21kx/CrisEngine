@@ -2,7 +2,10 @@
 #include <cstdint>
 #include <queue>
 
-using Entity_t = uint64_t;
+struct Entity{
+	
+	using Entity_t = uint64_t;
+}
 
 
 struct ComponentDesc {
