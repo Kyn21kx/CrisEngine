@@ -1,11 +1,17 @@
 #include <cassert>
 #include <cstdint>
 #include "asset_manager/asset_manager.h"
+#include "ecs/entity_manager.h"
 #include "raylib.h"
 #include "resource_manager.h"
 
 AssetManager g_assetManager;
 Texture2D g_tex;
+
+struct Position {
+    float x;
+    float y;
+};
 
 void Intialize() {
     // Initialization
@@ -35,6 +41,16 @@ void Intialize() {
     assert(loadImageErr == ResourceManager::EError::Ok);
 
     g_tex = LoadTextureFromImage(sampleImage);
+
+
+    EntityManager scene;
+
+    Entity_t player = scene.New();
+
+    scene.AddComponent<Position>(player);
+    Position* pos = scene.GetComponent<Position>(player);
+    pos->x = 10;
+    pos->y = 20;
 }
 
 void Update() {
