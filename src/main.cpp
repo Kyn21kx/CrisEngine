@@ -1,12 +1,14 @@
 #include <cassert>
 #include <cstdint>
 #include "asset_manager/asset_manager.h"
-#include "ecs/entity_manager.h"
+#include "ecs/ecs.hpp"
 #include "raylib.h"
 #include "resource_manager.h"
 
 AssetManager g_assetManager;
 Texture2D g_tex;
+ComponentId positionComp;
+Entity playerEnt;
 
 struct Position {
     float x;
@@ -36,21 +38,23 @@ void Intialize() {
 
     SetTargetFPS(60);
 
-    Image sampleImage{};
-    auto loadImageErr = ResourceManager::LoadImageIntoBuffer(buffer, asset.byteSize, &sampleImage);
-    assert(loadImageErr == ResourceManager::EError::Ok);
+    // Image sampleImage{};
+    // auto loadImageErr = ResourceManager::LoadImageIntoBuffer(buffer, asset.byteSize, &sampleImage);
+    // assert(loadImageErr == ResourceManager::EError::Ok);
 
-    g_tex = LoadTextureFromImage(sampleImage);
+    // g_tex = LoadTextureFromImage(sampleImage);
 
 
-    EntityManager scene;
+    ecs_init();
 
-    Entity_t player = scene.New();
-
-    scene.AddComponent<Position>(player);
-    Position* pos = scene.GetComponent<Position>(player);
-    pos->x = 10;
-    pos->y = 20;
+    playerEnt = ecs_new_entity();
+    positionComp = ecs_component_register(sizeof(Position), alignof(Position));
+    Position posComp{};
+    ecs_add(playerEnt, positionComp, &posComp);
+    
+    Position* pos = (Position*)ecs_get(playerEnt, positionComp);
+    pos->x = 190;
+    pos->y = 200;
 }
 
 void Update() {
@@ -58,9 +62,11 @@ void Update() {
 
     ClearBackground(RAYWHITE);
 
-    DrawText("Hello, Raylib in C!", 190, 200, 20, DARKGRAY);
-    DrawTexture(g_tex, 190, 200, WHITE);
+    Position* pos = (Position*)ecs_get(playerEnt, positionComp);
+    pos->x += GetTime();
+    pos->y += GetTime();
 
+    DrawText("Hello, Raylib in C!", pos->x, pos->y, 20, DARKGRAY);
     EndDrawing();
 }
 
