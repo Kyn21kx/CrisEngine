@@ -9,7 +9,7 @@ inline constexpr size_t MAX_ENTITIES   = 1024;
 inline constexpr size_t MAX_COMPONENTS = 256;
 inline constexpr size_t BITSET_WORDS = (MAX_COMPONENTS + 63) / 64;
 
-using Entity      = std::uint32_t;
+using Entity      = std::uint64_t;
 using ComponentId = std::uint16_t;
 using MaskWord    = std::uint64_t;
 
