@@ -26,8 +26,6 @@ constexpr uint32_t Fnv1a(std::string_view data)
 	return Fnv1a(data.data(), data.size());
 }
 
-// Necesitamos la abstracción del asset
-
 enum class EAssetType : uint8_t {
 	None = 0,
 	Texture,

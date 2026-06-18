@@ -69,12 +69,14 @@ void arena_pop_to(mem_arena *arena, u64 pos){
 void arena_clear(mem_arena *arena){
 	arena_pop_to(arena, ARENA_BASE_POS);
 }
-
+//TODO(cris): REMEMBER TO SUBMIT THIS CHANGE 
 mem_arena_temp mem_arena_temp_begin(mem_arena* arena){
-	return (mem_arena_temp){
-		.arena = arena,
-		.start_pos = arena->pos
-	};
+	
+		mem_arena_temp temp {
+			.arena = arena,
+			.start_pos = arena->pos
+		};
+		return temp;
 }
 
 void arena_temp_end(mem_arena_temp temp){
@@ -100,9 +102,10 @@ mem_arena_temp arena_scratch_get(mem_arena** conflicts, u32 num_conflicts){
 				break;
 			}
 			}
-
+			//TODO(cris): REMEMBER TO SUBMIT THIS CHANGE
 			if (scratch_index == -1) {
-					return (mem_arena_temp){0};
+				mem_arena_temp temp = {0,0};
+					return temp;
 			}
 
 			mem_arena** selected = &_scratch_arenas[scratch_index];
@@ -119,7 +122,6 @@ void arena_scratch_release(mem_arena_temp scratch){
 
 
 #if defined(_WIN32)
-
 #include <windows.h>
 
 u32 plat_get_pagesize(void) {

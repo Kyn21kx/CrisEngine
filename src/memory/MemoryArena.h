@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <cstdio.h>
+#include <stdio.h>
 #include <string.h>
 
 using  i8 = int8_t;
@@ -56,8 +56,8 @@ void arena_scratch_release(mem_arena_temp scratch);
 
 #define PUSH_STRUCT(ARENA, T) (T*)arena_push((arena), sizeof(T), false)
 #define PUSH_STRUCT_NZ(ARENA, T) (T*)arena_push((arena), sizeof(T), true)
-#define PUSH_ARRAY(arena, T, n (T*)arena_push((arena), size of (T) * (n), false)
-#define PUSH_ARRAY(arena, T, n (T*)arena_push((arena), size of (T) * (n), true)
+#define PUSH_ARRAY(arena, T, n) (T*)arena_push((arena), sizeof (T) * (n), false)
+#define PUSH_ARRAY_NZ(arena, T, n)(T*)arena_push((arena), sizeof (T) * (n), true)
 
 u32 plat_get_pagesize(void);
 

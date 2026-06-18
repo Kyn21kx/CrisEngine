@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <queue>
+#include "memory/MemoryArena.h"
 
 using Entity_t = uint64_t;
 
@@ -18,6 +19,7 @@ struct ComponentInstance {
 class EntityManager {
 public:
 	static constexpr Entity_t MAX_ENTITIES = 1024;
+	static constexpr size_t MAX_COMPONENTS = 1024;
 
 	static constexpr Entity_t INVALID = 0;
 
@@ -38,8 +40,13 @@ public:
 	}
 
 private:
+	
 	std::queue<Entity_t> m_readyEntities;
+	Entity_t m_componentTables[MAX_ENTITIES][MAX_COMPONENTS]{};
+	ComponentInstance m_components[MAX_ENTITIES]{};
 	uint64_t m_livingEntities = 0;
+	bool m_alive[MAX_ENTITIES];
+  mem_arena* m_arena;
 };
 
 

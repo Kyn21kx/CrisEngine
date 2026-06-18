@@ -2,7 +2,9 @@
 
 #include "raylib.h"
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
+
 
 namespace ResourceManager {
 	
@@ -13,7 +15,7 @@ namespace ResourceManager {
 	
 	EError LoadImageIntoBuffer(const uint8_t* buffer, size_t byteSize, Image* outImageData) {
 		assert(outImageData != nullptr && "Cannot load data into an empty out image reference");
-		*outImageData = LoadImageFromMemory("png", buffer, byteSize);
+		*outImageData = LoadImageFromMemory(".png", buffer, byteSize);
 
 		if (outImageData->data == nullptr) {
 			return EError::WrongFormat;
