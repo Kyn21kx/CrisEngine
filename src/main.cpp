@@ -1,11 +1,12 @@
-/*#include <cassert>
+#include <cassert>
 #include <cstdint>
 #include <cstdio>
 #include "asset_manager/asset_manager.h"
-#include "resource_manager.h"
+#include "platform_layer/engine_platform.hpp"
+#include "2dmovement.hpp"
+#include "raylib.h"
+// #include "resource_manager.h"
 #include "ecs/ecs.hpp"
-#include "gameplay.hpp"
-#include <dlfcn.h>
 
 //#include "resource_manager.h"
 
@@ -17,6 +18,9 @@ Entity playerEnt;
 Image fullImage{};
 Image partialImage{};
 Texture2D partialTexture{};
+void* libraryHandle;
+using script_fn_t = void(*)(Position*, float dt);
+script_fn_t scriptEntry;
 
 
 constexpr float TEXTURE_R = 0;
@@ -26,32 +30,16 @@ void Intialize() {
     // Initialization
     const int32_t screenWidth = 800;
     const int32_t screenHeight = 600;
-//NOTE(cris): Introducir una virtaulizacion de path o una solucion cross platform empieza a ser necesario
-    g_assetManager.Scan("/home/cristhian/CrisEngine/media/");
-
-   const Asset& asset = g_assetManager.GetAssetAt(0);
-    
-    uint8_t* buffer = static_cast<uint8_t*>(malloc(asset.byteSize));
-
-    assert(buffer != nullptr && "Failed to allocate!");
-    
-    AssetManager::EError loadResErr = g_assetManager.LoadResource(asset, buffer, asset.byteSize);
-
-    if (loadResErr != AssetManager::EError::Ok) {
-        printf("Failed to load resource!\n");
-    }
+    //NOTE(cris): Introducir una virtaulizacion de path o una solucion cross platform empieza a ser necesario
 
     InitWindow(screenWidth, screenHeight, "Raylib Basic Loop");
 
     SetTargetFPS(60);
     
-     auto loadImageErr = ResourceManager::LoadImageIntoBuffer(buffer, asset.byteSize, &fullImage);
-     assert(loadImageErr == ResourceManager::EError::Ok);
-
-    partialImage = ImageFromImage(fullImage,{ 0, 0 , 30 , 40 });
-    partialTexture = LoadTextureFromImage(partialImage);
     ecs_init();
 
+    libraryHandle = os::dlib_open("C:\\Users\\nefes\\Personal\\ChrisEngine\\scripts\\build\\Debug_Win64\\scripts\\scripts.dll");
+    scriptEntry = (script_fn_t)os::dlib_load_symbol(libraryHandle, "print_fn");
 
 
     playerEnt = ecs_new_entity();
@@ -78,18 +66,17 @@ void Update() {
     ClearBackground(RAYWHITE);
     
     Position* pos = (Position*)ecs_get(playerEnt, positionComp);
-    Velocity* vel = (Velocity*)ecs_get(playerEnt, velocityComp);
+    // Velocity* vel = (Velocity*)ecs_get(playerEnt, velocityComp);
+    scriptEntry(pos, GetTime());
+
     
-    key_movement(vel);
-    mouse_movement(pos, vel);
     //NOTE:Udate position after all modifications    
-    update_pos(pos, vel);
-    DrawTextureEx(partialTexture, {pos->x, pos->y},TEXTURE_R , TEXTURE_S, WHITE);
-        EndDrawing();
+    // DrawTextureEx(partialTexture, {pos->x, pos->y},TEXTURE_R , TEXTURE_S, WHITE);
+    DrawText("Hello there", pos->x, pos->y, 24, BLACK);
+    EndDrawing();
 }
 
 int main() {
-
 	Intialize();
     while (!WindowShouldClose())
     {
@@ -97,50 +84,6 @@ int main() {
     }
 
     CloseWindow();        // Close window and OpenGL context	
+    os::dlib_close(libraryHandle);
 	return 0;
-}
-*/
-
-#include <cassert>
-#include <cstdlib>
-#include <dlfcn.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <thread>
-#include <chrono>
-
-#include "2dmovement.hpp"
-
-
-void dlib_loader(const char* library_path, const char* function_name){    
-    print_sig print_fnc;
-
-void* libhandle = dlopen(library_path, RTLD_NOW);
-
-     //assert(libhandle == NULL && "Library not found!");  
-    
-(void) dlerror();
-
-*(void **)(&print_fnc) = dlsym(libhandle,function_name);
-
-//const char* error = dlerror();
- //assert(error!=NULL && "Function not found!");
- 
- print_fnc();
-
-dlclose(libhandle);
-
-}
-
-
-
-int main(){
-
-    
-    while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(2));
-         dlib_loader("/home/cristhian/CrisEngine/libgameplay.so", "print");
-            }    
-    return 0;
 }

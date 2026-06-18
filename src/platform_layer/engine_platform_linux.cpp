@@ -1,32 +1,21 @@
 #pragma once
-#include "platform_layer/engine_platform.hpp"
-#include <cassert>
-
 #ifdef __linux__
+
+#include <cassert>
 #include <dlfcn.h>
 #include <fcntl.h>
 #include <unistd.h>
 
+void* _internal_dlib_open(const char *library_path) {
+  void *libhandle = dlopen(library_path, RTLD_NOW);
 
-void dlib_loader(const char* library_path, const char* function_name){    
-    sum_sig sum;
+  assert(libhandle != nullptr && "Library not found!");
 
-void* libhandle = dlopen(library_path, RTLD_NOW);
-
-     assert(libhandle == NULL && "Library not found!");  
-    
-(void) dlerror();
-
-*(void **)(&sum) = dlsym(libhandle,function_name);
-
-const char* error = dlerror();
- assert(error!=NULL && "Function not found!");
- 
-int result = sum(10,10);
-
-dlclose(libhandle);
-
-return result;
+  return libHandle;
 }
+
+#else
+
+#error "Linux API cannot be included in compilation unit for another platform"
 
 #endif

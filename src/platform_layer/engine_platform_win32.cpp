@@ -1,28 +1,29 @@
-#pragma once
-#include "platform_layer/engine_platform.hpp"
 #include <cassert>
-#ifdef WIN32
+#include <libloaderapi.h>
+#include <minwindef.h>
+#ifdef _WIN32
 #include <windows.h>
 
-HMODULE LoadLibrary( 
-  LPCSTR lib_name;//16bit const char
-);
+void* _internal_dlib_open(const char *library_path) {
+  // returns a handle if succedeed
+  HANDLE lib_handle = LoadLibrary(library_path);
+  assert(lib_handle != nullptr && "Libray not found!");
 
-//return the address of the exported function
-FARPROC GetProcAddress(
-  HMODULE module,
-  LPCSTR  func_name
-);
-
-void dlib_loader(const char* library_path, const char* function_name){
-  //returns a handle if succedeed  
-func_sig;
- HANDLE lib_handle =  LoadLibrary(TEXT(library_path));
- assert(lib_handle != NULL && "Libray not found!");
-
-  pfn = (func_sig)GetProcAddress(lib_handle, TEXT(function_name));
-  pfn();
-
-  freeLibrary(lib_handle);
+  return reinterpret_cast<void*>(lib_handle);
 }
+
+void* _internal_dlib_load_symbol(void* libHandle, const char* symbolName) {
+  HINSTANCE handleInstance = static_cast<HINSTANCE>(libHandle);
+  FARPROC processAddress = GetProcAddress(handleInstance, symbolName);
+  return reinterpret_cast<void *>(processAddress);
+}
+
+void _internal_dlib_close(void* handle) {
+  FreeLibrary(static_cast<HMODULE>(handle));
+}
+
+#else
+
+#error "Windows API cannot be included in compilation unit for another platform"
+
 #endif

@@ -6,8 +6,11 @@
 // NOTE(cris): La idea seria hacer privada a todas estas funciones
 
 namespace os {
-void dlib_loader(const char* library_path, const char* function_name);
+	void* dlib_open(const char* library_path);
 
+	void dlib_close(void* handle);
+
+	void* dlib_load_symbol(void* libHandle, const char* symbolName);
 }
 
 
